@@ -1,0 +1,38 @@
+/* Estilos generales */
+body {
+  background-color: #f8f9fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Encabezados y navegación */
+h1, h2, .navbar-brand {
+  font-weight: bold;
+}
+
+/* Texto introductorio y párrafos */
+.lead,
+.card-text {
+  font-size: 1.1rem;
+}
+
+/* Efecto de elevación en las tarjetas */
+.card {
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Imagen del carrusel */
+.carousel-inner img {
+  height: 300px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+/* Footer */
+footer p {
+  font-size: 0.9rem;
+}
+
