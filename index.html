@@ -59,31 +59,21 @@
     </div>
     <!-- Navbar -->
     <header class="sticky top-0 z-40">
-      <nav class="navbar-bg mx-auto max-w-5xl mt-4 flex items-center justify-between px-6 py-3 rounded-2xl family-shadow">
+      <nav id="mainNav" class="navbar-bg mx-auto max-w-5xl mt-0 lg:mt-4 flex items-stretch justify-between px-6 py-3 rounded-2xl family-shadow text-align-center relative transition-all duration-200">
         <div class="flex items-center gap-3">
           <i class="bi bi-cup-hot-fill text-3xl accent"></i>
           <a class="text-2xl font-extrabold tracking-widest accent family-serif" href="#">El Rincón de la Esencia</a>
         </div>
-        <button id="menuBtn" class="lg:hidden accent hover:text-[#6b4f33] focus:outline-none" title="Abrir menú de navegación">
+        <button id="menuBtn" class="lg:hidden accent hover:text-[#6b4f33] focus:outline-none" title="Abrir menú de navegación" aria-expanded="false" aria-controls="navMenu">
           <i class="bi bi-list text-3xl"></i>
         </button>
-        <ul id="navMenu" class="hidden lg:flex gap-8 text-lg font-semibold">
-          <li><a class="hover:accent transition" href="#inicio">Inicio</a></li>
-          <li><a class="hover:accent transition" href="#carta">Carta</a></li>
-          <li><a class="hover:accent transition" href="#fotos">Imágenes</a></li>
-          <li><a class="hover:accent transition" href="#contacto">Contacto</a></li>
+        <ul id="navMenu" class="hidden lg:flex gap-8 text-lg font-semibold absolute lg:static top-[100%] left-0 w-full lg:w-auto bg-[#f5f3ed] lg:bg-transparent shadow-lg lg:shadow-none rounded-b-2xl lg:rounded-none rounded-t-none z-30 transition-all duration-200">
+          <li class = "text-align-center"><a class="block px-6 py-4 lg:p-0 hover:accent transition " href="#inicio">Inicio</a></li>
+          <li class = "text-align-center"><a class="block px-6 py-4 lg:p-0 hover:accent transition " href="#carta">Carta</a></li>
+          <li class = "text-align-center"><a class="block px-6 py-4 lg:p-0 hover:accent transition " href="#fotos">Imágenes</a></li>
+          <li class = "text-align-center"><a class="block px-6 py-4 lg:p-0 hover:accent transition " href="#contacto">Contacto</a></li>
         </ul>
       </nav>
-      <!-- Menú móvil -->
-      <div id="mobileMenu" class="lg:hidden fixed top-0 left-0 w-full h-full bg-[#f5f3ed]/95 z-50 hidden flex-col items-center justify-center">
-        <button id="closeMenu" class="absolute top-6 right-8 accent text-4xl" title="Cerrar menú de navegación"><i class="bi bi-x"></i></button>
-        <ul class="flex flex-col gap-8 text-2xl font-bold mt-24">
-          <li class = "text-center"><a class="hover:accent" href="#inicio">Inicio</a></li>
-          <li class = "text-center"><a class="hover:accent" href="#carta">Carta</a></li>
-          <li class = "text-center"><a class="hover:accent" href="#fotos">Imágenes</a></li>
-          <li class = "text-center"><a class="hover:accent" href="#contacto">Contacto</a></li>
-        </ul>
-      </div>
     </header>
     <!-- Hero -->
     <section class="max-w-5xl mx-auto px-4 pt-8 pb-4 flex flex-col md:flex-row items-center gap-8">
@@ -188,16 +178,54 @@
           });
         }
       });
-      // Navbar móvil
+      // Navbar móvil dropdown
       const menuBtn = document.getElementById('menuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
-      const closeMenu = document.getElementById('closeMenu');
-      if(menuBtn && mobileMenu && closeMenu) {
-        menuBtn.addEventListener('click', () => mobileMenu.classList.remove('hidden'));
-        closeMenu.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-        document.querySelectorAll('#mobileMenu a').forEach(link => {
-          link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+      const navMenu = document.getElementById('navMenu');
+      const mainNav = document.getElementById('mainNav');
+      if(menuBtn && navMenu && mainNav) {
+        menuBtn.addEventListener('click', function() {
+          const isOpen = !navMenu.classList.contains('hidden');
+          navMenu.classList.toggle('hidden');
+          menuBtn.setAttribute('aria-expanded', String(!isOpen));
+          // Quitar bordes redondeados del navbar cuando el menú está abierto en móvil
+          if(window.innerWidth < 1024) {
+            if (!isOpen) {
+              mainNav.classList.remove('rounded-2xl');
+            } else {
+              mainNav.classList.add('rounded-2xl');
+            }
+          }
         });
+        // Cerrar menú al hacer click en un enlace (solo móvil)
+        navMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', function() {
+            if(window.innerWidth < 1024) {
+              navMenu.classList.add('hidden');
+              menuBtn.setAttribute('aria-expanded', 'false');
+              mainNav.classList.add('rounded-2xl');
+            }
+          });
+        });
+        // Cerrar menú si se redimensiona a escritorio
+        window.addEventListener('resize', function() {
+          if(window.innerWidth >= 1024) {
+            navMenu.classList.remove('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+            mainNav.classList.add('rounded-2xl');
+          } else {
+            navMenu.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+            mainNav.classList.add('rounded-2xl');
+          }
+        });
+        // Inicial: oculto en móvil, visible en escritorio
+        if(window.innerWidth >= 1024) {
+          navMenu.classList.remove('hidden');
+          mainNav.classList.add('rounded-2xl');
+        } else {
+          navMenu.classList.add('hidden');
+          mainNav.classList.add('rounded-2xl');
+        }
       }
       // Carousel
       document.addEventListener('DOMContentLoaded', function() {
